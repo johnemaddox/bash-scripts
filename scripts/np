@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+# creates a new project from an existing project by copying 
+# the project directory and deleting the .git directory.
+
+if [ -z "$2" ]; then
+    echo -e "\e[31mInvalid format \e[0m"
+    echo -e "\e[33mnp [source] [destination] \e[0m"
+elif [ ! -d "$1" ]; then
+    echo -e "\e[31mSource directory does not exist. \e[0m"
+elif [ -d "$2" ]; then
+    echo -e "\e[31mDestination directory already exists. \e[0m"
+else
+    echo -e "\e[32mCopying project. \e[0m"
+    cp $1 $2 -r
+    cd $2
+
+    if [ -d ".git" ]; then
+        echo -e "\e[32mRemoving git fron new project. \e[0m"
+        rm -rf .git
+    fi
+fi

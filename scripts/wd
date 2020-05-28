@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+if [ ! -d "$PROJECT_DIR/$1" ]; then
+    echo -e "\e[31mDirectory does not exist. \e[0m"
+else
+    cd $PROJECT_DIR/$1
+    ls --color=auto
+fi

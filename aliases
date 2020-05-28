@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+
+# winpty for interactive terminal commands on windows
+# $OS seems to be a windows only env, so I'm using it as an indicator for now
+WINPTY=""
+if [ -n "$OS" ]; then
+    WINPTY="winpty "
+fi
+
+alias ls='ls --color=auto'
+alias grep='grep --color=auto'
+
+if [ "$HAS_PYTHON" == true ]; then
+    alias python="${WINPTY}python3"
+    alias pip="${WINPTY}pip3"
+    alias pip-upgrade="${WINPTY}python -m pip install --upgrade pip"
+fi
+
+if [ "$HAS_DOCKER" == true ]; then
+    alias dc="docker-compose"
+    alias dcr="${WINPTY}docker-compose run --rm"
+    alias dex="${WINPTY}docker exec -it"
+    alias dxx="docker system prune --all --volumes --force"
+    dkc () { docker kill $(docker ps -q); }
+fi
+
+alias git-log="git log --format='%C(auto)%h %s %Cgreen<%aN> %Cred(%cr)' -n 15"
+alias git-update="git pull --rebase --prune && git submodule update --init --recursive"
+alias git-publish="git push -u origin HEAD"
+alias git-undo="git reset --mixed HEAD~"
