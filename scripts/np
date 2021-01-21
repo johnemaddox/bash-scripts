@@ -1,22 +1,53 @@
 #!/usr/bin/env bash
 
-# creates a new project from an existing project by copying 
-# the project directory and deleting the .git directory.
+set -e
+set -u 
+set -o pipefail
 
-if [ -z "$2" ]; then
-    echo -e "\e[31mInvalid format \e[0m"
-    echo -e "\e[33mnp [source] [destination] \e[0m"
-elif [ ! -d "$1" ]; then
-    echo -e "\e[31mSource directory does not exist. \e[0m"
-elif [ -d "$2" ]; then
-    echo -e "\e[31mDestination directory already exists. \e[0m"
-else
-    echo -e "\e[32mCopying project. \e[0m"
-    cp $1 $2 -r
-    cd $2
+usage () {
+    echo "Copies source directory to a new directory and removes .git from new location."
+    echo "  np [source] [destination]"
+}
 
-    if [ -d ".git" ]; then
-        echo -e "\e[32mRemoving git fron new project. \e[0m"
-        rm -rf .git
-    fi
+# options
+while getopts ":h" opt; do
+    case "$opt" in
+        h)
+            usage
+            exit 0
+            ;;
+        ?)
+            echo "ERROR: Invalid flag"
+            exit 1
+            ;;
+    esac
+done
+
+# errors
+if [ -z "${2+x}" ]; then
+    echo "ERROR: Missing arguments."
+    exit 1
 fi
+
+if [ ! -d "$1" ]; then
+    echo "ERROR: Source directory does not exist."
+    exit 1
+fi
+
+if [ -d "$2" ]; then
+    echo "ERROR: Destination directory already exists."
+    exit 1
+fi
+
+#exec
+echo "Copying $1 to $2..."
+cp $1 $2 -r
+cd $2
+
+if [ -d ".git" ]; then
+    echo "Removing .git from $2..."
+    rm -rf .git
+fi
+
+echo "Done."
+exit 0

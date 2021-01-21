@@ -2,18 +2,14 @@
 Terminal formatting and commmands for common tasks.
 
 ## Install
-Creates a .bashrc file in the user directory. This will overwrite existing .bashrc file.
+Create **configs** file using template then run install. Install will overwrite current .bashrc.
 
 ```bash
-./install [-d] [-p] [project dir]
+./install
 ```
 
-### Flags
-- **-d:** include docker aliases
-- **-p:** include python aliases
-
 ## Scripts
-- **wd [directory]**
+- **wd [directory]** (located in aliases, must run in same instance)
     - cd /path/to/dir/$1
     - ls
 - **np [source] [destination]**

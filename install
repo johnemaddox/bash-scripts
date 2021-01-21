@@ -1,43 +1,30 @@
 #!/usr/bin/env bash
 
-PYTHON_BOOLEAN=false
-DOCKER_BOOLEAN=false
+set -e
+set -u 
+set -o pipefail
 
-while getopts 'pd' OPTION; do
-    case "$OPTION" in
-        p)
-            PYTHON_BOOLEAN=true
-        ;;
-        d)
-            DOCKER_BOOLEAN=true
-        ;;
-        ?)
-            echo -e "\e[31m./$(basename $0) [-p (python aliases)] [-d (docker aliases)] /project/dir \e[0m" >&2
-            exit 1
-        ;;
-    esac
-done
-
-shift "$(($OPTIND -1))"
-
-if [ ! -d "$1" ]; then
-    echo -e "\e[31mProject Directory does not exist. \e[0m"
-else
-    sed -e "s~INSERT_BASE_DIR~${PWD}~"        \
-        -e "s~INSERT_PROJECT_DIR~${1}~"                 \
-        -e "s~INSERT_PYTHON_BOOLEAN~${PYTHON_BOOLEAN}~" \
-        -e "s~INSERT_DOCKER_BOOLEAN~${DOCKER_BOOLEAN}~" \
-        bashrc_template > .bashrc
-
-    mv .bashrc ~
-
-    if [ "$PYTHON_BOOLEAN" == true ]; then
-        echo -e "\e[32mPython aliases enabled. \e[0m"
-    fi
-
-    if [ "$DOCKER_BOOLEAN" == true ]; then
-        echo -e "\e[32mDocker aliases enabled. \e[0m"
-    fi
-
-    echo -e "\e[32mUpdated .bashrc, restart terminal to load changes. \e[0m"
+echo ">> Checking configs file <<"
+if [ ! -f "./configs" ]; then
+    echo "No configs file found, creating..."
+    cp configs_template configs
+    vi configs
 fi
+
+source ./configs
+
+if [ ! -d "$WORK_DIR" ]; then
+    echo "ERROR: Work Directory ($WORK_DIR) does not exist."
+    exit 1
+fi
+
+echo "Work Dir: $WORK_DIR"
+echo "Docker:   $HAS_DOCKER"
+echo "Python:   $HAS_PYTHON"
+
+echo ">> Creating .bashrc <<"
+sed -e "s~INSERT_BASE_DIR~${PWD}~" bashrc_template > ~/.bashrc
+
+echo "Load .bashrc using \"source ~/.bashrc\" or by restarting terminal."
+
+exit 0
