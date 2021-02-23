@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [ ! -d ".git" ]; then
+    echo "ERROR: Not a git repo."
+    exit 1
+fi
+
+echo ">> Pulling changes <<"
+git stash --quiet
+git pull --rebase --prune origin
+if [ -n "$(git stash list)" ]; then
+    git stash pop --quiet
+fi
+
+echo ">> Confirm commits to publish <<"
+cur_branch=$(git branch --show-current)
+base_commit=$(git merge-base origin/$cur_branch $cur_branch)
+git-log $base_commit..HEAD
+
+echo -n "Publish the above commits to $cur_branch (y/n)? "
+read reply
+
+if [[ ${reply,,} =~ ^(y|yes)$ ]]; then
+    echo ">> Publishing changes <<"
+    git push -u origin HEAD
+    exit 0
+fi
+
+echo "=> Publish cancelled, no changes have been made."

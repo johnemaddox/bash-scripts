@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [ ! -d ".git" ]; then
+    echo "ERROR: Not a git repo."
+    exit 1
+fi
+
+echo ">> Updating Repo <<"
+git stash --quiet
+git pull --rebase --prune origin
+if [ -n "$(git stash list)" ]; then
+    git stash pop --quiet
+fi
+
+if [ -f ".gitmodules" ]; then
+    echo ">> Updating Submodules <<"
+    git submodule update --init --recursive
+fi
+
+echo "Repo update complete."

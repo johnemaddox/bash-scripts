@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+cmd_flags="-n 10"
+if [ -n "${1+x}" ]; then
+    cmd_flags="$@"
+fi
+
+git log --format='%C(auto)%h %s %Cgreen<%aN> %Cred(%cr)' $cmd_flags

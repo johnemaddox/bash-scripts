@@ -13,8 +13,7 @@ fi
 alias ls='ls --color=auto'
 alias grep='grep --color=auto'
 
-# must run in current instance, cannot be independent
-wd () { cd $WORK_DIR/$1 && ls --color=auto; }
+alias wd="cd $WORK_DIR && ls --color=auto"
 
 if [ "$HAS_PYTHON" == true ]; then
     alias python="${winpty}python3"
@@ -27,10 +26,5 @@ if [ "$HAS_DOCKER" == true ]; then
     alias dcr="${winpty}docker-compose run --rm"
     alias dex="${winpty}docker exec -it"
     alias dxx="docker system prune --all --volumes --force"
-    dkc () { docker kill $(docker ps -q); }
+    alias dkc='docker kill `docker ps -q`'
 fi
-
-alias git-log="git log --format='%C(auto)%h %s %Cgreen<%aN> %Cred(%cr)' -n 10"
-alias git-update="git pull --rebase --prune origin && git submodule update --init --recursive"
-alias git-publish="git push -u origin HEAD"
-alias git-undo="git reset --mixed HEAD~"

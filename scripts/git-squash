@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [ ! -d ".git" ]; then
+    echo "ERROR: Not a git repo."
+    exit 1
+fi
+
+echo ">> Confirm commits to squash <<"
+git fetch origin --quiet
+cur_branch=$(git branch --show-current)
+base_commit=$(git merge-base origin/$cur_branch $cur_branch)
+git-log $base_commit..HEAD
+
+echo -n "Squash the above commits into a single commit (y/n)? "
+read reply
+
+if [[ ${reply,,} =~ ^(y|yes)$ ]]; then
+    echo ">> Squashing commits down <<"
+    git reset
+    git reset --soft $base_commit
+    git commit
+    exit 0
+fi
+
+echo "=> Squash cancelled, no changes have been made."

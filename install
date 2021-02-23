@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
-
-set -e
-set -u 
-set -o pipefail
+set -euo pipefail
 
 echo ">> Checking configs file <<"
 if [ ! -f "./configs" ]; then
@@ -26,5 +23,3 @@ echo ">> Creating .bashrc <<"
 sed -e "s~INSERT_BASE_DIR~${PWD}~" bashrc_template > ~/.bashrc
 
 echo "Load .bashrc using \"source ~/.bashrc\" or by restarting terminal."
-
-exit 0

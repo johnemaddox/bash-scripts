@@ -1,53 +1,32 @@
 #!/usr/bin/env bash
+set -euo pipefail
 
-set -e
-set -u 
-set -o pipefail
-
-usage () {
-    echo "Copies source directory to a new directory and removes .git from new location."
-    echo "  np [source] [destination]"
-}
-
-# options
-while getopts ":h" opt; do
-    case "$opt" in
-        h)
-            usage
-            exit 0
-            ;;
-        ?)
-            echo "ERROR: Invalid flag"
-            exit 1
-            ;;
-    esac
-done
-
-# errors
 if [ -z "${2+x}" ]; then
     echo "ERROR: Missing arguments."
     exit 1
 fi
 
-if [ ! -d "$1" ]; then
+src_dir="$1"
+dest_dir="$2"
+
+if [ ! -d "$src_dir" ]; then
     echo "ERROR: Source directory does not exist."
     exit 1
 fi
 
-if [ -d "$2" ]; then
+if [ -d "$dest_dir" ]; then
     echo "ERROR: Destination directory already exists."
     exit 1
 fi
 
-#exec
-echo "Copying $1 to $2..."
-cp $1 $2 -r
-cd $2
+echo "Copying $src_dir to $dest_dir..."
+cp $src_dir $dest_dir -r
+cd $dest_dir
 
 if [ -d ".git" ]; then
-    echo "Removing .git from $2..."
+    echo "Reset git in $dest_dir..."
     rm -rf .git
+    git init
 fi
 
-echo "Done."
-exit 0
+echo "=> New project created at ./$dest_dir"

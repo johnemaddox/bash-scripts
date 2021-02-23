@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [ ! -d ".git" ]; then
+    echo "ERROR: Not a git repo."
+    exit 1
+fi
+
+commit_count=1
+if [ -n "${1+x}" ]; then
+    commit_count=$1
+fi
+
+echo ">> Confirm commits to undo <<"
+git-log -n $commit_count
+
+cur_branch=$(git branch --show-current)
+echo -n "Undo the above $commit_count commits and put the changes in an unstaged state (y/n)? "
+read reply
+
+if [[ ${reply,,} =~ ^(y|yes)$ ]]; then
+    echo ">> Undoing $commit_count in $cur_branch."
+    git reset --mixed HEAD~$commit_count
+    exit 0
+fi
+
+echo "=> Undo cancelled, no changes have been made."
