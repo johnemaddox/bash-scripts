@@ -14,7 +14,7 @@ fi
 echo ">> Confirm commits to undo <<"
 git-log -n $commit_count
 
-cur_branch=$(git branch --show-current)
+cur_branch=$(git rev-parse --abbrev-ref HEAD)
 echo -n "Undo the above $commit_count commits and put the changes in an unstaged state (y/n)? "
 read reply
 

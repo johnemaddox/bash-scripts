@@ -14,7 +14,7 @@ if [ -n "$(git stash list)" ]; then
 fi
 
 echo ">> Confirm commits to publish <<"
-cur_branch=$(git branch --show-current)
+cur_branch=$(git rev-parse --abbrev-ref HEAD)
 base_commit=$(git merge-base origin/$cur_branch $cur_branch)
 git-log $base_commit..HEAD
 
