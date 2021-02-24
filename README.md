@@ -10,7 +10,6 @@ Install overwrites current .bashrc and creates a **configs** file if one does no
 
 ## System
 - **wd:** cd and ls work_dir, defined in **configs**.
-- **np [source] [destination] (script):** Copies source directory to a new directory and removes .git from new location.
 
 ## Python
 - **python:** python3
