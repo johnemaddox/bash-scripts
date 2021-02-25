@@ -9,7 +9,8 @@ Install overwrites current .bashrc and creates a **configs** file if one does no
 ```
 
 ## System
-- **wd:** cd and ls work_dir, defined in **configs**.
+- **wd:** cd and ls work_dir
+- **bash-cfg:** quick access to config file
 
 ## Python
 - **python:** python3

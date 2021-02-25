@@ -4,22 +4,17 @@ set -euo pipefail
 echo ">> Checking configs file <<"
 if [ ! -f "./configs" ]; then
     echo "No configs file found, creating..."
-    cp configs_template configs
-    vi configs
+    cp configs_template.sh configs.sh
+    vi configs.sh
 fi
 
-source ./configs
-
-if [ ! -d "$WORK_DIR" ]; then
-    echo "ERROR: Work Directory ($WORK_DIR) does not exist."
-    exit 1
-fi
+source ./configs.sh
 
 echo "Work Dir: $WORK_DIR"
 echo "Docker:   $HAS_DOCKER"
 echo "Python:   $HAS_PYTHON"
 
 echo ">> Creating .bashrc <<"
-sed -e "s~INSERT_BASE_DIR~${PWD}~" bashrc_template > ~/.bashrc
+sed -e "s~INSERT_BASE_DIR~$(pwd)~" bashrc_template.sh > ~/.bashrc
 
-echo "Load .bashrc using \"source ~/.bashrc\" or by restarting terminal."
+echo "=> Restart terminal to load changes."

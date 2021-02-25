@@ -1,9 +1,3 @@
-#!/usr/bin/env bash
-
-if [ ! -d "$WORK_DIR" ]; then
-    echo "ERROR: Work Directory ($WORK_DIR) does not exist."
-fi
-
 # use winpty for interactive terminal commands on windows MINGW
 winpty=""
 if [[ $(uname) =~ MINGW* ]]; then
@@ -12,8 +6,6 @@ fi
 
 alias ls='ls --color=auto'
 alias grep='grep --color=auto'
-
-alias wd="cd $WORK_DIR && ls --color=auto"
 
 if [ "$HAS_PYTHON" == true ]; then
     alias python="${winpty}python3"
