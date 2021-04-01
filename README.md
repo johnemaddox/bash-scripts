@@ -25,6 +25,7 @@ Install overwrites current .bashrc and creates a **configs** file if one does no
 - **dkc:** docker kill $(docker ps -q)
 
 ## Git
+- **git-np \[base prefix] \[project dir] (script):** Creates a new project from a base project (c-base, py-base, etc)
 - **git-log (script):** Print formatted log
 - **git-publish (script):** Push current changes
 - **git-reset (script):** Drops local changes

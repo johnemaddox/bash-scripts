@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+usage () {
+    echo "git-np [base prefix] [project dir]"
+    echo "  Creates a new project from an base project by cloning the base,"
+    echo "  resetting git, and squashing the commits."
+    echo "  - Base Prefix: base repo title prefix. For c-base repo, c is prefix."
+    echo "  - Project dir: the directory where the project will be built."
+}
+
+if [ -d ".git" ]; then
+    echo "ERROR: This is a git repo."
+    exit 1
+fi
+
+if [ -z "${2+x}" ]; then
+    echo "ERROR: Missing arguments."
+    usage
+    exit 1
+fi
+
+repo="${1}-base"
+dir="$2"
+repo_url="git@github.com:${GITHUB_USER}/${repo}.git"
+
+echo ">> Cloning $repo to $dir <<"
+git clone $repo_url $dir
+
+
+echo ">> Cleanup <<"
+cd $dir
+commit="base from $repo @ $(git log --format='%h' -n1)"
+rm -rf .git
+git init
+git checkout -b main
+git add .
+git commit -m "$commit" 
+
+echo "done."
