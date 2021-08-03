@@ -3,9 +3,9 @@ set -euo pipefail
 
 usage () {
     echo "git-publish [-f]"
-    echo "  Default behavior is to pull, confirm commits, and push."
+    echo "  Confirm commits and push."
     echo "Flags:"
-    echo "  -f : Skips pull, force pushes all commits"
+    echo "  -f : Force push"
 }
 
 if [ ! -d ".git" ]; then
@@ -13,13 +13,11 @@ if [ ! -d ".git" ]; then
     exit 1
 fi
 
-do_pull=true
-flags=""
+do_force=false
 while getopts ":fh" opt; do
     case "$opt" in
         "f")
-            do_pull=false
-            flags="-f"
+            do_force=true
             ;;
         "h")
             usage
@@ -34,30 +32,23 @@ while getopts ":fh" opt; do
 done
 shift $((OPTIND -1))
 
+git fetch origin
+
+echo ">> Confirm commits to push <<"
+git-log origin/HEAD..HEAD
+
 cur_branch=$(git rev-parse --abbrev-ref HEAD)
-
-if [ $do_pull == true ]; then
-    echo ">> Pulling changes <<"
-    git stash --quiet
-    git pull --rebase --prune origin
-    if [ -n "$(git stash list)" ]; then
-        git stash pop --quiet
-    fi
-
-    echo ">> Confirm commits to publish <<"
-    base_commit=$(git merge-base origin/$cur_branch $cur_branch)
-    git-log $base_commit..HEAD
-else
-    echo ">> All commits will be pushed, these are most recent <<"
-    git-log -n 5
-fi
-
 echo -n "Publish the above commits to $cur_branch (y/n)? "
 read reply
 
 if [[ ${reply,,} =~ ^(y|yes)$ ]]; then
-    echo ">> Publishing changes <<"
-    git push -u $flags origin HEAD
+    echo ">> Pushing changes <<"
+    flags="-u"
+    if [ "$do_force" == true ];then
+        echo "Setting force push flag."
+        flags="${flags}f"
+    fi
+    git push $flags origin HEAD
 
     echo "done."
     exit 0
