@@ -6,8 +6,9 @@ if [ ! -d ".git" ]; then
     exit 1
 fi
 
+git fetch origin
+
 echo ">> Confirm commits to squash <<"
-git fetch origin --quiet
 cur_branch=$(git rev-parse --abbrev-ref HEAD)
 base_commit=$(git merge-base origin/$cur_branch $cur_branch)
 git-log $base_commit..HEAD
