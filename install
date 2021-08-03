@@ -2,7 +2,7 @@
 set -euo pipefail
 
 echo ">> Checking configs file <<"
-if [ ! -f "./configs" ]; then
+if [ ! -f "./configs.sh" ]; then
     echo "No configs file found, creating..."
     cp configs_template.sh configs.sh
     vi configs.sh
