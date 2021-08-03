@@ -13,9 +13,4 @@ if [ -n "$(git stash list)" ]; then
     git stash pop --quiet
 fi
 
-if [ -f ".gitmodules" ]; then
-    echo ">> Updating Submodules <<"
-    git submodule update --init --recursive
-fi
-
 echo "Repo update complete."
