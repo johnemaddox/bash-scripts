@@ -7,11 +7,12 @@ if [ ! -d ".git" ]; then
 fi
 
 git fetch origin
+cur_branch=$(git rev-parse --abbrev-ref HEAD)
+base_commit=$(git merge-base origin/$cur_branch $cur_branch)
 
 echo ">> Confirm commits to pull <<"
-git-log HEAD..origin/HEAD
+git-log HEAD..$base_commit
 
-cur_branch=$(git rev-parse --abbrev-ref HEAD)
 echo -n "Pull the above commits to $cur_branch (y/n)? "
 read reply
 

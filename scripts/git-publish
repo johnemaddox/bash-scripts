@@ -33,9 +33,11 @@ done
 shift $((OPTIND -1))
 
 git fetch origin
+cur_branch=$(git rev-parse --abbrev-ref HEAD)
+base_commit=$(git merge-base origin/$cur_branch $cur_branch)
 
 echo ">> Confirm commits to push <<"
-git-log origin/HEAD..HEAD
+git-log $base_commit..HEAD
 
 cur_branch=$(git rev-parse --abbrev-ref HEAD)
 echo -n "Publish the above commits to $cur_branch (y/n)? "

@@ -7,10 +7,11 @@ if [ ! -d ".git" ]; then
 fi
 
 git fetch origin
+cur_branch=$(git rev-parse --abbrev-ref HEAD)
+base_commit=$(git merge-base origin/$cur_branch $cur_branch)
 
 echo ">> Confirm commits to reset <<"
-cur_branch=$(git rev-parse --abbrev-ref HEAD)
-git-log origin/HEAD..HEAD
+git-log $base_commit..HEAD
 
 echo -n "Reset $cur_branch on remote, this throw away the above commits (y/n)? "
 read reply
