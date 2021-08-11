@@ -27,8 +27,6 @@ Install overwrites current .bashrc and creates a **configs** file if one does no
 ## Git
 - **git-np \[base prefix] \[project dir] (script):** Creates a new project from a base project (c-base, py-base, etc)
 - **git-log (script):** Print formatted log
-- **git-publish \[-n] \[-f] (script):** Confirm and push current changes. Use -f to force push.
 - **git-reset (script):** Drops local changes
 - **git-squash (script):** Squashes commits down into a single commit
 - **git-undo \[num] (script):** Undoes one or more commits, defaults to one. Changes are moved to unstaged state
-- **git-update (script):** Confirm and pull changes.
